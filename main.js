@@ -20,6 +20,7 @@ const preguntasYRespuestas = [
 ];
 
 let queFraseEstas = 0;
+let botonSeleccionado = null;
 
 const div = document.createElement("div");
 const h2 = document.createElement("h2");
@@ -82,7 +83,26 @@ function updateQuestion() {
     button4.textContent = preguntasYRespuestas[queFraseEstas].respuestas[3];
     button5.disabled = queFraseEstas === 0;
     button6.disabled = queFraseEstas === preguntasYRespuestas.length - 1;
+    if (botonSeleccionado) {
+        botonSeleccionado.style.backgroundColor = "";
+        botonSeleccionado = null;
+    }
 }
+
+function seleccionarOpcion(boton) {
+    
+    if (botonSeleccionado) {
+        botonSeleccionado.style.backgroundColor = "";
+    }
+    
+    boton.style.backgroundColor = "#3CB371";
+    botonSeleccionado = boton; 
+}
+
+
+[button1, button2, button3, button4].forEach((button) => {
+    button.addEventListener("click", () => seleccionarOpcion(button));
+});
 
 button6.addEventListener("click", () => {
     if (queFraseEstas < preguntasYRespuestas.length - 1) {
@@ -97,3 +117,4 @@ button5.addEventListener("click", () => {
         updateQuestion();
     }
 });
+
