@@ -20,7 +20,7 @@ const preguntasYRespuestas = [
 ];
 
 let queFraseEstas = 0;
-let botonSeleccionado = null;
+const selectedOptions = {}; 
 
 const div = document.createElement("div");
 const h2 = document.createElement("h2");
@@ -83,22 +83,30 @@ function updateQuestion() {
     button4.textContent = preguntasYRespuestas[queFraseEstas].respuestas[3];
     button5.disabled = queFraseEstas === 0;
     button6.disabled = queFraseEstas === preguntasYRespuestas.length - 1;
-    if (botonSeleccionado) {
-        botonSeleccionado.style.backgroundColor = "";
-        botonSeleccionado = null;
+    
+    
+    [button1, button2, button3, button4].forEach((btn) => {
+        btn.style.backgroundColor = "";
+    });
+    
+    
+    if (selectedOptions[queFraseEstas] !== undefined) {
+        const selectedIndex = selectedOptions[queFraseEstas];
+        [button1, button2, button3, button4][selectedIndex].style.backgroundColor = "#3CB371";
     }
 }
 
 function seleccionarOpcion(boton) {
     
-    if (botonSeleccionado) {
-        botonSeleccionado.style.backgroundColor = "";
-    }
-    
+    [button1, button2, button3, button4].forEach((btn) => {
+        btn.style.backgroundColor = "";
+    });
     boton.style.backgroundColor = "#3CB371";
-    botonSeleccionado = boton; 
+    
+   
+    const selectedIndex = [button1, button2, button3, button4].indexOf(boton);
+    selectedOptions[queFraseEstas] = selectedIndex;
 }
-
 
 [button1, button2, button3, button4].forEach((button) => {
     button.addEventListener("click", () => seleccionarOpcion(button));
@@ -118,3 +126,4 @@ button5.addEventListener("click", () => {
     }
 });
 
+updateQuestion(); 
