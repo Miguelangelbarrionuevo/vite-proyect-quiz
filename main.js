@@ -3,19 +3,23 @@ import './style.css'
 const preguntasYRespuestas = [
     {
         pregunta: "What is the capital of France?",
-        respuestas: ["London", "Berlín", "Paris", "Madrid"]
+        respuestas: ["London", "Berlín", "Paris", "Madrid"],
+        correcta: 2 
     },
     {
         pregunta: "What is the longest river in the world?",
-        respuestas: ["Amazonas", "Nilo", "Yangtsé", "Miño"]
+        respuestas: ["Amazonas", "Nilo", "Yangtsé", "Miño"],
+        correcta: 0 
     },
     {
         pregunta: "Who wrote Romeo and Juliet?",
-        respuestas: ["Jane Austen", "Cervantes", "William Shakespeare", "Charles Dickens"]
+        respuestas: ["Jane Austen", "Cervantes", "William Shakespeare", "Charles Dickens"],
+        correcta: 2 
     },
     {
         pregunta: "How many planets are there in our solar system?",
-        respuestas: ["7", "8", "9", "10"]
+        respuestas: ["7", "8", "9", "10"],
+        correcta: 1 
     }
 ];
 
@@ -37,6 +41,7 @@ const button3 = document.createElement("button");
 const button4 = document.createElement("button");
 const button5 = document.createElement("button");
 const button6 = document.createElement("button");
+const button7 = document.createElement("button");
 
 div.className = "container";
 h2.textContent = "Quiz Question";
@@ -47,6 +52,7 @@ button3.textContent = preguntasYRespuestas[0].respuestas[2];
 button4.textContent = preguntasYRespuestas[0].respuestas[3];
 button5.textContent = "Previous";
 button6.textContent = "Next";
+button7.textContent = "Check";
 
 document.body.appendChild(div);
 div.append(h2, p, ul, div1);
@@ -58,7 +64,7 @@ li.append(button1);
 li1.append(button2);
 li2.append(button3);
 li3.append(button4);
-div1.append(button5, button6);
+div1.append(button5, button6, button7);
 
 ul.classList.add("container-answers");
 div.classList.add("container");
@@ -68,9 +74,12 @@ button3.classList.add("answer-btn");
 button4.classList.add("answer-btn");
 button5.classList.add("footer-btn");
 button6.classList.add("footer-btn");
+button7.classList.add("footer-btn");
 div1.classList.add("container-footer");
 
 button5.disabled = true;
+button7.disabled = true;
+
 button6.addEventListener("click", () => {
     button5.disabled = false;
 });
@@ -84,11 +93,9 @@ function updateQuestion() {
     button5.disabled = queFraseEstas === 0;
     button6.disabled = queFraseEstas === preguntasYRespuestas.length - 1;
     
-    
     [button1, button2, button3, button4].forEach((btn) => {
         btn.style.backgroundColor = "";
     });
-    
     
     if (selectedOptions[queFraseEstas] !== undefined) {
         const selectedIndex = selectedOptions[queFraseEstas];
@@ -97,15 +104,27 @@ function updateQuestion() {
 }
 
 function seleccionarOpcion(boton) {
-    
     [button1, button2, button3, button4].forEach((btn) => {
         btn.style.backgroundColor = "";
     });
     boton.style.backgroundColor = "#3CB371";
     
-   
     const selectedIndex = [button1, button2, button3, button4].indexOf(boton);
     selectedOptions[queFraseEstas] = selectedIndex;
+
+    if (Object.keys(selectedOptions).length === 4) {
+        button7.disabled = false;
+    }
+}
+
+function mostrarResultados() {
+    let correctas = 0;
+    for (let i = 0; i < preguntasYRespuestas.length; i++) {
+        if (selectedOptions[i] === preguntasYRespuestas[i].correcta) {
+            correctas++;
+        }
+    }
+    alert(`Has acertado ${correctas} de 4 preguntas.`);
 }
 
 [button1, button2, button3, button4].forEach((button) => {
@@ -125,5 +144,7 @@ button5.addEventListener("click", () => {
         updateQuestion();
     }
 });
+
+button7.addEventListener("click", mostrarResultados);
 
 updateQuestion(); 
