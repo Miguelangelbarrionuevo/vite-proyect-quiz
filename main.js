@@ -1,30 +1,30 @@
-import './style.css'
+import './style.css';
 
 const preguntasYRespuestas = [
     {
         pregunta: "What is the capital of France?",
         respuestas: ["London", "Berlín", "Paris", "Madrid"],
-        correcta: 2 
+        correcta: 2
     },
     {
         pregunta: "What is the longest river in the world?",
         respuestas: ["Amazonas", "Nilo", "Yangtsé", "Miño"],
-        correcta: 0 
+        correcta: 0
     },
     {
         pregunta: "Who wrote Romeo and Juliet?",
         respuestas: ["Jane Austen", "Cervantes", "William Shakespeare", "Charles Dickens"],
-        correcta: 2 
+        correcta: 2
     },
     {
         pregunta: "How many planets are there in our solar system?",
         respuestas: ["7", "8", "9", "10"],
-        correcta: 1 
+        correcta: 1
     }
 ];
 
 let queFraseEstas = 0;
-const selectedOptions = {}; 
+const selectedOptions = {};
 
 const div = document.createElement("div");
 const h2 = document.createElement("h2");
@@ -84,6 +84,7 @@ button6.addEventListener("click", () => {
     button5.disabled = false;
 });
 
+
 function updateQuestion() {
     p.textContent = preguntasYRespuestas[queFraseEstas].pregunta;
     button1.textContent = preguntasYRespuestas[queFraseEstas].respuestas[0];
@@ -117,14 +118,55 @@ function seleccionarOpcion(boton) {
     }
 }
 
-function mostrarResultados() {
+function calcularCorrectas() {
     let correctas = 0;
     for (let i = 0; i < preguntasYRespuestas.length; i++) {
         if (selectedOptions[i] === preguntasYRespuestas[i].correcta) {
             correctas++;
         }
     }
-    alert(`Has acertado ${correctas} de 4 preguntas.`);
+    return correctas;
+}
+
+// Función para crear y mostrar el modal
+function createModal() {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal';
+    overlay.addEventListener('click', closeModal);
+
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.addEventListener('click', (event) => event.stopPropagation());
+
+    const closeButton = document.createElement('span');
+    closeButton.className = 'modal-close';
+    closeButton.textContent = 'X';
+    closeButton.addEventListener('click', closeModal);
+
+    const modalTitle = document.createElement('h2');
+    modalTitle.textContent = 'Resultados del Quiz';
+
+    const modalhr = document.createElement('hr');
+    
+    const modalMessage = document.createElement('p');
+    modalMessage.textContent = `Has acertado ${calcularCorrectas()} de 4 preguntas.`;
+
+    modalContent.append(closeButton, modalTitle, modalhr,modalMessage);
+    overlay.append(modalContent);
+    document.body.appendChild(overlay);
+
+    overlay.style.opacity = '1';
+    overlay.style.visibility = 'visible';
+}
+
+// Función para cerrar el modal
+function closeModal() {
+    const overlay = document.querySelector('.modal');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+        setTimeout(() => overlay.remove(), 300);
+    }
 }
 
 [button1, button2, button3, button4].forEach((button) => {
@@ -145,6 +187,6 @@ button5.addEventListener("click", () => {
     }
 });
 
-button7.addEventListener("click", mostrarResultados);
+button7.addEventListener("click", createModal);
 
-updateQuestion(); 
+updateQuestion();
